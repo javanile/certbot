@@ -1,6 +1,14 @@
 
 build:
-	chmod +x entrypoint.sh
-	docker build -t javanile/certbot .
+	@chmod +x entrypoint.sh
+	@docker build -t javanile/certbot .
+
 test: build
-	docker run --rm -t javanile/certbot
+	@echo
+	@echo "====[ TEST ]===="
+	@mkdir -p cert
+	@chmod 777 -R cert
+	@docker run --rm -ti \
+		-p 80:80 -p 443:443 \
+		-v "$(PWD)/cert:/cert" \
+		javanile/certbot webrequest.javanile.org
