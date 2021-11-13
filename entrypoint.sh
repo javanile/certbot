@@ -26,7 +26,7 @@ certbot certonly --dry-run --standalone --noninteractive -d ${DOMAIN} --agree-to
 if [ $? -eq 0 ]; then
   echo "Trying SSL certificates"
   rm /var/log/letsencrypt/letsencrypt.log
-  certbot certonly --dry-run --standalone --noninteractive -d ${DOMAIN} --agree-tos -m bianco@javanile.org && true
+  certbot certonly --standalone --noninteractive -d ${DOMAIN} --agree-tos -m bianco@javanile.org && true
 fi
 
 mkdir -p /etc/letsencrypt/live/${DOMAIN}
