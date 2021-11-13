@@ -7,7 +7,7 @@ test: build
 	@echo
 	@echo "====[ TEST ]===="
 	@mkdir -p cert
-	@chmod 777 -R cert
+	@chmod 777 cert
 	@docker run --rm -ti \
 		-p 80:80 -p 443:443 \
 		-v "$(PWD)/cert:/cert" \

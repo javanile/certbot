@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 set -e
 
-PUBLIC_IP=$(curl -s ipinfo.io/ip)
 DOMAIN=$1
+PUBLIC_IP=$(curl -s ipinfo.io/ip)
 
 echo "Problem was found, step by step instructions will be provided:"
 host -t cname ${DOMAIN}
@@ -24,8 +24,12 @@ echo
 echo "Trying SSL certificates"
 certbot certonly --dry-run --standalone --noninteractive -d ${DOMAIN} --agree-tos -m bianco@javanile.org && true
 if [ $? -eq 0 ]; then
-  certbot certonly --dry-run --standalone --noninteractive -d ${DOMAIN} --agree-tos -m bianco@javanile.org
+  echo "Trying SSL certificates"
+  rm /var/log/letsencrypt/letsencrypt.log
+  certbot certonly --dry-run --standalone --noninteractive -d ${DOMAIN} --agree-tos -m bianco@javanile.org && true
 fi
 
-cp /var/log/letsencrypt/letsencrypt.log /cert/letsencrypt.log
+mkdir -p /etc/letsencrypt/live/${DOMAIN}
+cp /var/log/letsencrypt/letsencrypt.log /etc/letsencrypt/live/${DOMAIN}/letsencrypt.log
+cp -rL /etc/letsencrypt/live/${DOMAIN}/* /cert/ && true
 chmod 777 -R /cert
